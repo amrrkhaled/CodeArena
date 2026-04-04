@@ -1,0 +1,102 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root {
+  --bg: #08111d;
+  --bg-soft: #0f1b2d;
+  --surface: rgba(13, 24, 39, 0.8);
+  --surface-strong: #17263b;
+  --surface-muted: rgba(255, 255, 255, 0.04);
+  --surface-hover: rgba(255, 255, 255, 0.08);
+  --surface-overlay: rgba(10, 18, 30, 0.84);
+  --surface-overlay-strong: rgba(16, 28, 46, 0.96);
+  --surface-light: #f4f7fb;
+  --card-border: rgba(148, 163, 184, 0.2);
+  --border-soft: rgba(159, 176, 199, 0.16);
+  --border-strong: rgba(159, 176, 199, 0.22);
+  --border-focus: rgba(110, 145, 204, 0.42);
+  --text: #d9e4f2;
+  --text-soft: #95a8bf;
+  --text-strong: #f5f8fc;
+  --text-dark: #102033;
+  --accent: #6b7cff;
+  --accent-soft: #99a5ff;
+  --accent-cool: #46a7a4;
+  --accent-contrast: #08111c;
+  --success: #35a66d;
+  --danger: #d85f72;
+  --shadow-sm: 0 12px 26px rgba(1, 10, 24, 0.16);
+  --shadow-lg: 0 24px 80px rgba(1, 10, 24, 0.32);
+  --page-glow-a: rgba(107, 124, 255, 0.18);
+  --page-glow-b: rgba(70, 167, 164, 0.12);
+  --page-gradient-start: #08111d;
+  --page-gradient-mid: #0d1827;
+  --page-gradient-end: #132134;
+}
+
+:root[data-theme="light"] {
+  --bg: #edf2f8;
+  --bg-soft: #dbe5f1;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-strong: #ffffff;
+  --surface-muted: rgba(15, 23, 42, 0.04);
+  --surface-hover: rgba(15, 23, 42, 0.08);
+  --surface-overlay: rgba(255, 255, 255, 0.92);
+  --surface-overlay-strong: rgba(255, 255, 255, 0.98);
+  --card-border: rgba(105, 128, 156, 0.18);
+  --border-soft: rgba(105, 128, 156, 0.18);
+  --border-strong: rgba(105, 128, 156, 0.26);
+  --border-focus: rgba(110, 145, 204, 0.34);
+  --text: #31465f;
+  --text-soft: #566981;
+  --text-strong: #18293f;
+  --text-dark: #102033;
+  --accent: #5067d8;
+  --accent-soft: #7b8eec;
+  --accent-cool: #2f8f8c;
+  --accent-contrast: #f8fbff;
+  --success: #22865c;
+  --danger: #c65166;
+  --shadow-sm: 0 12px 26px rgba(49, 70, 95, 0.1);
+  --shadow-lg: 0 28px 70px rgba(49, 70, 95, 0.14);
+  --page-glow-a: rgba(80, 103, 216, 0.12);
+  --page-glow-b: rgba(47, 143, 140, 0.1);
+  --page-gradient-start: #f8fbff;
+  --page-gradient-mid: #eef3f8;
+  --page-gradient-end: #e6edf5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--text);
+  background:
+    radial-gradient(circle at top left, var(--page-glow-a), transparent 32%),
+    radial-gradient(circle at top right, var(--page-glow-b), transparent 30%),
+    linear-gradient(180deg, var(--page-gradient-start) 0%, var(--page-gradient-mid) 42%, var(--page-gradient-end) 100%);
+  font-family: "Space Grotesk", sans-serif;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+code,
+pre {
+  font-family: "IBM Plex Mono", monospace;
+}
+
+a {
+  color: inherit;
+}

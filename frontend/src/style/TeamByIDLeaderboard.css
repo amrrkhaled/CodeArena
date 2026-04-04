@@ -1,0 +1,166 @@
+/* ================================
+   TeamByIDLeaderboard (Light Theme)
+   ================================ */
+
+.team-leaderboard-container {
+  min-height: 100vh;
+  padding: 2rem;
+  background: transparent;
+  color: var(--text);
+  display: flex;
+  justify-content: center;
+}
+
+.team-content {
+  width: 100%;
+  max-width: 1100px;
+  margin: auto;
+}
+
+/* ---------- Header ---------- */
+.team-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.team-header h2 {
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.team-header p {
+  margin-top: 0.5rem;
+  color: var(--text-soft);
+  font-size: 1.1rem;
+}
+
+/* ---------- Stats Grid ---------- */
+.team-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.stat-card {
+  background: rgba(11, 24, 39, 0.78);
+  padding: 1.5rem;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(159, 176, 199, 0.12);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 18px rgba(70, 130, 169, 0.25);
+}
+
+.stat-card span {
+  font-size: 0.95rem;
+  color: var(--text-soft);
+  display: block;
+  margin-bottom: 0.4rem;
+}
+
+.stat-card h3 {
+  font-size: 1.8rem;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* ---------- Section Boxes ---------- */
+.team-section {
+  background: rgba(11, 24, 39, 0.78);
+  padding: 1.5rem 2rem;
+  border-radius: 20px;
+  margin-bottom: 2rem;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(159, 176, 199, 0.12);
+}
+
+.team-section h3 {
+  color: #fff;
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  border-bottom: 2px solid var(--color-accent);
+  display: inline-block;
+  padding-bottom: 0.4rem;
+}
+
+.team-section ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.team-section ul li {
+  margin-bottom: 0.7rem;
+  color: var(--text);
+  padding: 0.4rem 0.6rem;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: background 0.2s ease;
+}
+
+.team-section ul li:hover {
+  background: rgba(70, 130, 169, 0.15);
+}
+
+.accepted-tag {
+  margin-left: 0.5rem;
+  color: var(--text-soft);
+  font-size: 0.85rem;
+}
+
+/* ---------- Submissions Table ---------- */
+.team-submissions-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.03);
+  box-shadow: none;
+}
+
+.team-submissions-table thead {
+  background: rgba(255,255,255,0.06);
+}
+
+.team-submissions-table th {
+  padding: 1rem;
+  color: #fff;
+  text-align: center;
+  font-weight: 600;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.team-submissions-table td {
+  padding: 0.9rem;
+  text-align: center;
+  color: var(--text-soft);
+  border-bottom: 1px solid rgba(159,176,199,0.12);
+}
+
+.team-submissions-table tr:nth-child(even) {
+  background: rgba(70, 130, 169, 0.05);
+}
+
+.team-submissions-table tr:hover {
+  background: rgba(70, 130, 169, 0.15);
+  transition: background 0.2s ease;
+}
+
+/* ---------- Verdict Highlight ---------- */
+.row-success td {
+  color: #2e8b57;
+  font-weight: 600;
+}
+
+.row-danger td {
+  color: var(--color-error);
+  font-weight: 600;
+}

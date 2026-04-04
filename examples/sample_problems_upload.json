@@ -1,0 +1,47 @@
+[
+  {
+    "id": "A",
+    "title": "Sum Two Numbers",
+    "description": "Given two integers a and b, print their sum.",
+    "input_description": "A single line containing two integers a and b.",
+    "output_description": "Print one integer: a + b.",
+    "sample_input": "2 3",
+    "sample_output": "5",
+    "time_limit_ms": 1000,
+    "memory_limit_mb": 64,
+    "test_cases": [
+      { "input": "2 3", "output": "5", "is_sample": true },
+      { "input": "10 20", "output": "30", "is_sample": false }
+    ]
+  },
+  {
+    "id": "B",
+    "title": "Even or Odd",
+    "description": "Given one integer n, print EVEN if n is even, otherwise print ODD.",
+    "input_description": "A single integer n.",
+    "output_description": "Print EVEN or ODD.",
+    "sample_input": "7",
+    "sample_output": "ODD",
+    "time_limit_ms": 1000,
+    "memory_limit_mb": 64,
+    "test_cases": [
+      { "input": "7", "output": "ODD", "is_sample": true },
+      { "input": "10", "output": "EVEN", "is_sample": false }
+    ]
+  },
+  {
+    "id": "C",
+    "title": "Maximum Element",
+    "description": "Given an array of n integers, print the maximum value.",
+    "input_description": "The first line contains n. The second line contains n integers.",
+    "output_description": "Print the maximum element.",
+    "sample_input": "5\n1 8 2 4 9",
+    "sample_output": "9",
+    "time_limit_ms": 1000,
+    "memory_limit_mb": 64,
+    "test_cases": [
+      { "input": "5\n1 8 2 4 9", "output": "9", "is_sample": true },
+      { "input": "4\n-1 -2 -3 -4", "output": "-1", "is_sample": false }
+    ]
+  }
+]

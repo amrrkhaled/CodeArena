@@ -1,0 +1,83 @@
+@import url('https://fonts.googleapis.com/css?family=Product+Sans:400,700&display=swap');
+
+:root {
+  --admin-dark: #1B1B2F;
+  --admin-mid: #162447;
+  --admin-accent: #E43F5A;
+  --admin-light: #EEEEEE;
+  --admin-gray: #A9A9A9;
+}
+
+.admin-leaderboard-container {
+  padding: 3rem 2rem;
+  min-height: 83vh;
+  background: linear-gradient(to bottom right, var(--admin-dark), var(--admin-mid));
+  color: var(--admin-light);
+  font-family: 'Product Sans', sans-serif;
+}
+
+.admin-leaderboard-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.admin-leaderboard-header h1 {
+  font-size: 2.3rem;
+  color: var(--admin-accent);
+}
+
+.admin-leaderboard-header p {
+  font-size: 1rem;
+  color: var(--admin-gray);
+}
+
+.admin-leaderboard-table {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  border-collapse: collapse;
+  background-color: #222;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+}
+
+.admin-leaderboard-table thead {
+  background-color: var(--admin-accent);
+}
+
+.admin-leaderboard-table th {
+  padding: 1rem;
+  font-size: 1rem;
+  color: white;
+  text-align: center;
+}
+
+.admin-leaderboard-table td {
+  padding: 0.8rem;
+  text-align: center;
+  font-size: 0.95rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--admin-light);
+}
+
+.admin-leaderboard-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.admin-leaderboard-table tr:hover {
+  background-color: rgba(228, 63, 90, 0.2);
+  transition: 0.2s;
+}
+
+.admin-leaderboard-table td:first-child {
+  font-weight: bold;
+  color: var(--admin-accent);
+}
+
+.admin-empty-msg {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 1.1rem;
+  color: var(--admin-gray);
+}

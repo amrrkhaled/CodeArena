@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+backend/node_modules/
+frontend/node_modules/
+
+# Build output
+dist/
+frontend/dist/
+frontend/dist-ssr/
+
+# Environment files
+.env
+*.env
+!.env.example
+backend/.env
+frontend/.env
+
+# Runtime / generated files
+backend/uploads/
+*.log
+logs/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Local tooling
+.codex

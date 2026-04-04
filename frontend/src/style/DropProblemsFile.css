@@ -1,0 +1,275 @@
+.drop-container {
+  min-height: auto;
+  background: transparent;
+  display: flex;
+  justify-content: center;
+  padding: 0;
+  color: var(--text);
+}
+
+.drop-card {
+  background: transparent;
+  padding: 0;
+  border-radius: 0;
+  max-width: none;
+  width: 100%;
+}
+
+.drop-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.drop-zone {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 140px;
+  padding: 1.15rem 1.25rem;
+  border-radius: 22px;
+  border: 1px dashed var(--border-strong);
+  background: var(--surface-muted);
+  transition: border-color 0.2s ease, transform 0.2s ease, background 0.2s ease;
+}
+
+.drop-zone.has-file {
+  border-color: color-mix(in srgb, var(--accent-cool) 46%, transparent);
+}
+
+.drop-zone.dragging {
+  border-color: color-mix(in srgb, var(--accent) 42%, transparent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.drop-zone-copy {
+  width: 100%;
+  max-width: 460px;
+  text-align: center;
+}
+
+.drop-zone-copy h3 {
+  color: var(--text-strong);
+  font-size: 1.15rem;
+  margin-bottom: 0.25rem;
+}
+
+.drop-zone-copy p {
+  color: var(--text-soft);
+  line-height: 1.4;
+  font-size: 0.98rem;
+  margin: 0;
+}
+
+.drop-info-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 18px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border-soft);
+}
+
+.drop-file-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.drop-file-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 148px;
+  padding: 0.82rem 1rem;
+  border-radius: 999px;
+  background: var(--surface-hover);
+  border: 1px solid var(--border-soft);
+  color: var(--text-strong);
+  cursor: pointer;
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: border-color 0.2s ease, background 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.drop-file-button:hover {
+  border-color: var(--border-focus);
+  background: color-mix(in srgb, var(--accent-cool) 10%, transparent);
+}
+
+.drop-remove-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 116px;
+  padding: 0.82rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 95, 109, 0.22);
+  background: rgba(255, 95, 109, 0.08);
+  color: #ffd0d5;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.98rem;
+  line-height: 1;
+  transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
+  appearance: none;
+  -webkit-appearance: none;
+}
+
+.drop-remove-button:hover {
+  border-color: rgba(255, 95, 109, 0.36);
+  background: rgba(255, 95, 109, 0.12);
+}
+
+.drop-input {
+  display: none;
+}
+
+.drop-file-summary {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.3rem;
+  padding: 0;
+  min-width: 0;
+}
+
+.drop-summary-label {
+  color: var(--text-soft);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+}
+
+.drop-summary-name {
+  color: var(--text-soft);
+  font-weight: 600;
+  font-size: 0.98rem;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.drop-summary-name.has-file {
+  color: var(--text-strong);
+}
+
+.drop-footer {
+  padding-top: 0.9rem;
+}
+
+.drop-button {
+  width: 100%;
+  min-height: 58px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 84%, #f0c3a5));
+  color: var(--accent-contrast);
+  border: none;
+  padding: 0.95rem 1.25rem;
+  border-radius: 18px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 14px 26px color-mix(in srgb, var(--accent) 24%, transparent);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.drop-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 18px 34px color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+.drop-button:disabled {
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+  opacity: 0.5;
+}
+
+.drop-alert {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  font-weight: 600;
+}
+
+.drop-alert.error {
+  background: rgba(255, 95, 109, 0.08);
+  color: var(--danger);
+  border: 1px solid rgba(255, 95, 109, 0.32);
+}
+
+.drop-alert.success {
+  background: rgba(84, 198, 235, 0.1);
+  color: var(--accent-cool);
+  border: 1px solid rgba(84, 198, 235, 0.32);
+}
+
+.problems-list {
+  margin-top: 2rem;
+}
+
+.problems-list h2 {
+  color: var(--text-strong);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.problem-card {
+  background: var(--surface-hover);
+  padding: 1rem;
+  border-radius: 18px;
+  margin-bottom: 1rem;
+  border: 1px solid var(--border-soft);
+  transition: box-shadow 0.2s ease;
+}
+
+.problem-card:hover {
+  box-shadow: 0 18px 30px rgba(2, 10, 19, 0.18);
+}
+
+.problem-card h5 {
+  margin: 0 0 0.5rem 0;
+  color: var(--text-strong);
+}
+
+@media (max-width: 640px) {
+  .drop-zone {
+    padding: 1rem;
+    min-height: 170px;
+  }
+
+  .drop-info-card {
+    grid-template-columns: 1fr;
+    align-items: stretch;
+  }
+
+  .drop-file-button,
+  .drop-remove-button,
+  .drop-button {
+    width: 100%;
+  }
+
+  .drop-file-actions {
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: flex-start;
+  }
+
+  .drop-summary-name {
+    white-space: normal;
+  }
+}

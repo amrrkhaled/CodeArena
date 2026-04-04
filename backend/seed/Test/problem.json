@@ -1,0 +1,86 @@
+[
+  {
+    "id": "B",
+    "title": "Palindrome Check",
+    "description": "Check if a given string is a palindrome.",
+    "input_description": "A single string of lowercase letters.",
+    "output_description": "Output YES if it is a palindrome, otherwise NO.",
+    "sample_input": "abba",
+    "sample_output": "YES",
+    "test_cases": [
+      { "input": "madam", "output": "YES", "is_sample": true },
+      { "input": "abcba", "output": "YES", "is_sample": true },
+      { "input": "world", "output": "NO", "is_sample": true },
+      { "input": "a", "output": "YES", "is_sample": false },
+      { "input": "ab", "output": "NO", "is_sample": false },
+      { "input": "racecar", "output": "YES", "is_sample": false },
+      { "input": "level", "output": "YES", "is_sample": false },
+      { "input": "python", "output": "NO", "is_sample": false },
+      { "input": "noon", "output": "YES", "is_sample": false },
+      { "input": "abbaabba", "output": "YES", "is_sample": false }
+    ]
+  },
+  {
+    "id": "C",
+    "title": "Maximum of Three Numbers",
+    "description": "Find the maximum among three integers.",
+    "input_description": "Three integers a, b, and c.",
+    "output_description": "The largest integer among them.",
+    "sample_input": "3 7 5",
+    "sample_output": "7",
+    "test_cases": [
+      { "input": "1 2 3", "output": "3", "is_sample": true },
+      { "input": "-1 -2 -3", "output": "-1", "is_sample": true },
+      { "input": "10 10 5", "output": "10", "is_sample": true },
+      { "input": "100 50 200", "output": "200", "is_sample": false },
+      { "input": "0 0 0", "output": "0", "is_sample": false },
+      { "input": "-5 -10 -1", "output": "-1", "is_sample": false },
+      { "input": "7 7 7", "output": "7", "is_sample": false },
+      { "input": "123 456 789", "output": "789", "is_sample": false },
+      { "input": "-100 50 25", "output": "50", "is_sample": false },
+      { "input": "999 888 777", "output": "999", "is_sample": false }
+    ]
+  },
+  {
+    "id": "D",
+    "title": "Count Vowels",
+    "description": "Count the number of vowels in a given string.",
+    "input_description": "A string containing lowercase letters.",
+    "output_description": "One integer: the count of vowels (a, e, i, o, u).",
+    "sample_input": "hello",
+    "sample_output": "2",
+    "test_cases": [
+      { "input": "aeiou", "output": "5", "is_sample": true },
+      { "input": "xyz", "output": "0", "is_sample": true },
+      { "input": "banana", "output": "3", "is_sample": true },
+      { "input": "programming", "output": "3", "is_sample": false },
+      { "input": "abracadabra", "output": "5", "is_sample": false },
+      { "input": "queue", "output": "4", "is_sample": false },
+      { "input": "rhythm", "output": "0", "is_sample": false },
+      { "input": "mississippi", "output": "4", "is_sample": false },
+      { "input": "openai", "output": "4", "is_sample": false },
+      { "input": "quickbrownfox", "output": "4", "is_sample": false }
+    ]
+  },
+  {
+    "id": "E",
+    "title": "Factorial",
+    "description": "Given an integer n, compute its factorial.",
+    "input_description": "A single integer n (0 ≤ n ≤ 12).",
+    "output_description": "One integer: n! (n factorial).",
+    "sample_input": "5",
+    "sample_output": "120",
+    "test_cases": [
+      { "input": "0", "output": "1", "is_sample": true },
+      { "input": "1", "output": "1", "is_sample": true },
+      { "input": "6", "output": "720", "is_sample": true },
+      { "input": "3", "output": "6", "is_sample": false },
+      { "input": "4", "output": "24", "is_sample": false },
+      { "input": "7", "output": "5040", "is_sample": false },
+      { "input": "8", "output": "40320", "is_sample": false },
+      { "input": "10", "output": "3628800", "is_sample": false },
+      { "input": "11", "output": "39916800", "is_sample": false },
+      { "input": "12", "output": "479001600", "is_sample": false }
+    ]
+  }
+]

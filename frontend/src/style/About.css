@@ -1,0 +1,129 @@
+.about-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 3rem 1.5rem 4rem;
+}
+
+.about-hero {
+  padding: 2.75rem;
+  border-radius: 30px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--surface-strong) 92%, transparent), color-mix(in srgb, var(--surface) 96%, transparent));
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-lg);
+}
+
+.about-kicker {
+  display: inline-block;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--accent-soft);
+  font-size: 0.8rem;
+}
+
+.about-hero h1 {
+  margin-top: 1rem;
+  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  line-height: 1;
+  color: var(--text-strong);
+}
+
+.about-hero p {
+  margin-top: 1.2rem;
+  max-width: 52rem;
+  color: var(--text-soft);
+  font-size: 1.05rem;
+  line-height: 1.8;
+}
+
+.about-grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.about-card,
+.about-values {
+  border: 1px solid var(--border-soft);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+  backdrop-filter: blur(16px);
+}
+
+.about-card {
+  border-radius: 24px;
+  padding: 1.75rem;
+}
+
+.about-card h2 {
+  color: var(--text-strong);
+  font-size: 1.35rem;
+}
+
+.about-card p {
+  margin-top: 0.85rem;
+  color: var(--text-soft);
+  line-height: 1.75;
+}
+
+.about-values {
+  margin-top: 2rem;
+  border-radius: 30px;
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1.5rem;
+}
+
+.about-values-copy h2 {
+  margin-top: 0.8rem;
+  font-size: 2.1rem;
+  color: var(--text-strong);
+}
+
+.about-values-copy p {
+  margin-top: 1rem;
+  color: var(--text-soft);
+  line-height: 1.85;
+}
+
+.about-checklist {
+  display: grid;
+  gap: 1rem;
+}
+
+.check-item {
+  padding: 1.2rem;
+  border-radius: 22px;
+  background: var(--surface-muted);
+  border: 1px solid var(--border-soft);
+}
+
+.check-item strong {
+  display: block;
+  color: var(--text-strong);
+  margin-bottom: 0.45rem;
+}
+
+.check-item span {
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+@media (max-width: 920px) {
+  .about-grid,
+  .about-values {
+    grid-template-columns: 1fr;
+  }
+
+  .about-hero,
+  .about-values {
+    padding: 2rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .about-page {
+    padding: 1.5rem 1rem 3rem;
+  }
+}
