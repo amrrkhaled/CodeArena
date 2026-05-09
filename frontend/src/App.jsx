@@ -36,12 +36,8 @@ function App() {
           <Router>
             <Navbar />
             <Routes>
-              {/* Landing — redirect based on auth */}
-              <Route path="/" element={
-                localStorage.getItem("token")
-                  ? <Navigate to="/problems" replace />
-                  : <Navigate to="/login" replace />
-              } />
+              {/* Landing */}
+              <Route path="/" element={<Home />} />
 
               {/* Public */}
               <Route path="/login" element={<Login />} />
