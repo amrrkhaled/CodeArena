@@ -27,7 +27,7 @@ const Problems = () => {
       setSolvedProblems(0);
       return;
     }
-    if (status == "running") {
+    if (status === "running") {
       api.get(`/problems/${contestId}`, {
         headers: { Authorization: `Bearer ${token}` }
       })
@@ -45,6 +45,9 @@ const Problems = () => {
         setSolvedProblems(res.data.solvedCount);
       })
       .catch(err => console.error("Error fetching solved problems:", err));
+    } else {
+      setProblems([]);
+      setSolvedProblems(0);
     }
   }, [status, contestId, navigate]);
 
@@ -58,7 +61,7 @@ const Problems = () => {
   };
 
   const displayedProblems = problems.slice((page - 1) * problemsPerPage, page * problemsPerPage);
-  const statusLabel = status ? status.charAt(0).toUpperCase() + status.slice(1) : "No contest";
+  const statusLabel = status ? status.charAt(0).toUpperCase() + status.slice(1) : "No Contest";
 
   return (
     <div className="problems-page">
@@ -71,15 +74,18 @@ const Problems = () => {
               : "Select a contest to browse its problem set and start solving."}
           </p>
         </div>
-        <div className="problems-status-pill">{statusLabel}</div>
+        <div className={`problems-status-pill${status === "inactive" ? " inactive" : ""}`}>{statusLabel}</div>
       </div>
       {!contestId && (
         <div className="problems-empty-state">Select a contest first to view problems.</div>
       )}
+      {contestId && status === "inactive" && (
+        <div className="problems-empty-state">This contest is currently inactive.</div>
+      )}
       {blindTimeStarted && (
         <div className="problems-blind-banner">Blind time has started. The public leaderboard is now frozen.</div>
       )}
-      <div className="problems-shell">
+      {status === "running" && <div className="problems-shell">
         <div className="problems-card">
           <div className="problems-card-header">
             <h2>Problem List</h2>
@@ -139,7 +145,7 @@ const Problems = () => {
             </div>
           </div>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };

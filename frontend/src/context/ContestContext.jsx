@@ -92,6 +92,34 @@ export const ContestProvider = ({ children }) => {
   useEffect(() => {
     const selected = contests.find((contest) => String(contest.id) === String(selectedContestId)) || null;
     setCurrentContest(selected);
+
+    if (!selected || !selectedContestId) return;
+
+    if (!selected.is_active) {
+      setStatus("inactive");
+      setTimeLeft(null);
+      setBlindTimeStarted(false);
+      return;
+    }
+
+    const { start_time, end_time, blind_started_at } = selected;
+    const now = Date.now();
+    const start = new Date(start_time).getTime();
+    const end = new Date(end_time).getTime();
+    const blindStart = blind_started_at ? new Date(blind_started_at).getTime() : null;
+
+    if (now < start) {
+      setStatus("upcoming");
+      setTimeLeft(Math.floor((start - now) / 1000));
+    } else if (now > end) {
+      setStatus("ended");
+      setTimeLeft(0);
+    } else {
+      setStatus("running");
+      setTimeLeft(Math.floor((end - now) / 1000));
+    }
+
+    setBlindTimeStarted(Boolean(blindStart && now >= blindStart && now <= end));
   }, [contests, selectedContestId]);
 
   useEffect(() => {
