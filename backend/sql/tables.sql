@@ -1,5 +1,5 @@
 -- 1. Teams
-CREATE TABLE teams (
+CREATE TABLE IF NOT EXISTS teams (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
     password TEXT NOT NULL,
@@ -8,7 +8,7 @@ CREATE TABLE teams (
 );
 
 -- 2. Contests
-CREATE TABLE contests (
+CREATE TABLE IF NOT EXISTS contests (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     start_time TIMESTAMP NOT NULL,
@@ -18,8 +18,8 @@ CREATE TABLE contests (
 );
 
 -- 3. Problems
-CREATE TABLE problems (
-    id VARCHAR(10), -- e.g. 'A', 'B', 'C'
+CREATE TABLE IF NOT EXISTS problems (
+    id VARCHAR(10),
     contest_id INT REFERENCES contests(id) ON DELETE CASCADE,
     title VARCHAR(100) NOT NULL,
     description TEXT,
@@ -33,14 +33,14 @@ CREATE TABLE problems (
 );
 
 -- 4. Languages
-CREATE TABLE languages (
+CREATE TABLE IF NOT EXISTS languages (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     extension VARCHAR(10) NOT NULL
 );
 
 -- 5. Submissions
-CREATE TABLE submissions (
+CREATE TABLE IF NOT EXISTS submissions (
     id SERIAL PRIMARY KEY,
     team_id INT REFERENCES teams(id) ON DELETE CASCADE,
     contest_id INT REFERENCES contests(id) ON DELETE CASCADE,
@@ -57,7 +57,7 @@ CREATE TABLE submissions (
 );
 
 -- 6. Test Cases
-CREATE TABLE test_cases (
+CREATE TABLE IF NOT EXISTS test_cases (
   id SERIAL PRIMARY KEY,
   contest_id INT,
   problem_id VARCHAR(10),
@@ -70,7 +70,7 @@ CREATE TABLE test_cases (
 );
 
 -- 7. Admins
-CREATE TABLE admins (
+CREATE TABLE IF NOT EXISTS admins (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     password TEXT NOT NULL,

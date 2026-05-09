@@ -1,0 +1,119 @@
+x-logging:
+  &default-logging
+  logging:
+    driver: json-file
+    options:
+      max-size: 100M
+
+services:
+
+  # ── App Database ─────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: CodeArena
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backend/sql/tables.sql:/docker-entrypoint-initdb.d/01_tables.sql
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Judge0 Database ───────────────────────────────────────────────────────────
+  db:
+    image: postgres:16.2
+    env_file: ./judge/judge0.conf
+    volumes:
+      - judge0_db_data:/var/lib/postgresql/data
+    <<: *default-logging
+    restart: always
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U judge0"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Judge0 Redis ──────────────────────────────────────────────────────────────
+  redis:
+    image: redis:7.2.4
+    command: [
+      "bash", "-c",
+      'docker-entrypoint.sh --appendonly no --requirepass "$$REDIS_PASSWORD"'
+    ]
+    env_file: ./judge/judge0.conf
+    volumes:
+      - judge0_redis_data:/data
+    <<: *default-logging
+    restart: always
+
+  # ── Judge0 Server ─────────────────────────────────────────────────────────────
+  judge0-server:
+    image: judge0/judge0:1.13.1
+    volumes:
+      - ./judge/judge0.conf:/judge0.conf:ro
+    ports:
+      - "2358:2358"
+    privileged: true
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    <<: *default-logging
+    restart: always
+
+  # ── Judge0 Workers ────────────────────────────────────────────────────────────
+  judge0-workers:
+    image: judge0/judge0:1.13.1
+    command: ["./scripts/workers"]
+    volumes:
+      - ./judge/judge0.conf:/judge0.conf:ro
+    privileged: true
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+    <<: *default-logging
+    restart: always
+
+  # ── Backend ───────────────────────────────────────────────────────────────────
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    environment:
+      PORT: 5000
+      HOST: 0.0.0.0
+      DATABASE_URL: postgresql://postgres:password@postgres:5432/CodeArena
+      FRONTEND_CORS: http://localhost:80
+      JWT_SECRET: replace_with_a_long_random_secret
+      JUDGE0_URL: http://judge0-server:2358/submissions
+    depends_on:
+      postgres:
+        condition: service_healthy
+      judge0-server:
+        condition: service_started
+    restart: unless-stopped
+
+  # ── Frontend ──────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        VITE_API_URL: /api
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  judge0_db_data:
+  judge0_redis_data:

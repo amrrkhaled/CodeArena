@@ -167,7 +167,7 @@ const ProblemDetails = () => {
     return (
         <div className="problem-details-page">
         {/* Problem details */}
-        <Paper className="problem-sheet">
+        <Paper className="problem-sheet" sx={{ background: "var(--surface)", color: "var(--text)" }}>
             <Typography variant="h4" gutterBottom className="problem-sheet-title">
             {problem.title}
             </Typography>
@@ -226,7 +226,7 @@ const ProblemDetails = () => {
         </Paper>
 
         {/* Submission form */}
-        <Paper className="submission-sheet">
+        <Paper className="submission-sheet" sx={{ background: "var(--surface)", color: "var(--text)" }}>
             <div className="submission-sheet-header">
               <Typography variant="h5" gutterBottom style={{ color: "var(--text-strong)", marginBottom: 0 }}>Submit Solution</Typography>
               <p>Choose a language, optionally load a local file, and send your final code for judging.</p>

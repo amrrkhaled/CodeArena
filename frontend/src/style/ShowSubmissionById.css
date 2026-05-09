@@ -1,12 +1,12 @@
 .submission-view-container {
-  background: rgba(11, 24, 39, 0.78);
+  background: var(--surface);
   color: var(--text);
   padding: 2rem;
   max-width: 900px;
   margin: 2rem auto;
   border-radius: 24px;
   box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(159, 176, 199, 0.14);
+  border: 1px solid var(--border-soft);
 }
 
 .submission-view-header {
@@ -19,7 +19,7 @@
 }
 
 .submission-view-container h2 {
-  color: #fff;
+  color: var(--text-strong);
   margin-bottom: 0.35rem;
 }
 
@@ -28,43 +28,48 @@
 }
 
 .submission-back-button {
-  border: 1px solid rgba(159, 176, 199, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-  color: #fff;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-muted);
+  color: var(--text-strong);
   border-radius: 999px;
   padding: 0.8rem 1.15rem;
   cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.submission-back-button:hover {
+  background: var(--surface-hover);
 }
 
 .submission-details {
   font-size: 1.1rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.04);
+  background: var(--surface-muted);
   border-radius: 18px;
-  border: 1px solid rgba(159, 176, 199, 0.12);
+  border: 1px solid var(--border-soft);
   line-height: 1.8;
   word-wrap: break-word;
+  color: var(--text);
 }
 
 .submission-details p {
   margin: 0.6rem 0;
+  color: var(--text);
 }
 
 .submission-details strong {
-  color: #fff;
+  color: var(--text-strong);
 }
 
-/* Add styling for hidden or unavailable values */
 .submission-details .hidden-info {
-  color: #888;
+  color: var(--text-soft);
   font-style: italic;
   font-size: 0.95rem;
 }
 
-/* Styled code block (read-only) */
 .submission-code {
-  background: #08111c;
-  color: #d9e4f5;
+  background: var(--surface-strong);
+  color: var(--text);
   padding: 1rem;
   border-radius: 18px;
   margin-top: 1.5rem;
@@ -72,19 +77,24 @@
   white-space: pre-wrap;
   font-family: "IBM Plex Mono", monospace;
   font-size: 0.95rem;
-  border: 1px solid rgba(159, 176, 199, 0.12);
-  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-soft);
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.08);
 }
 
-/* Optional: Add a label before code */
 .code-label {
   font-size: 1rem;
   font-weight: 600;
   margin-top: 2rem;
-  color: #fff;
+  color: var(--text-strong);
 }
 
-/* Responsive tweaks */
+.note {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.95rem;
+  color: var(--text-soft);
+}
+
 @media screen and (max-width: 768px) {
   .submission-view-container {
     padding: 1rem;
@@ -98,11 +108,4 @@
   .submission-code {
     font-size: 0.9rem;
   }
-}
-
-.note {
-  margin-top: 1.5rem;
-  text-align: center;
-  font-size: 0.95rem;
-  color: var(--text-soft);
 }

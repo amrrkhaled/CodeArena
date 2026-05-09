@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./Components/Navbar";
 import Home from "./Components/Home";
 import About from "./Components/About";
@@ -25,6 +25,7 @@ import { GenerateTeams } from "./Admin/GenerateTeams";
 import { AdminProtectedRoute } from "./Admin/AdminProtectedRoute";
 import { AdminShowAllSubmission } from "./Admin/AdminShowAllSubmission";
 import { AdminShowSubmissonById } from "./Admin/AdminShowSubmissonById";
+import { ProtectedRoute } from "./Auth/ProtectedRoute";
 
 
 function App() {
@@ -35,16 +36,25 @@ function App() {
           <Router>
             <Navbar />
             <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/problems" element={<Problems />} />
-              <Route path="/problems/:id" element={<ProblemDetails />} />
-              <Route path="/leaderboard/:contestId" element={<Leaderboard />} />
-              <Route path="/submissions/" element={<FetchAllYourSubmissions />} />
-              <Route path="/submissions/:id" element={<ShowSubmissionById />} />
+              {/* Landing — redirect based on auth */}
+              <Route path="/" element={
+                localStorage.getItem("token")
+                  ? <Navigate to="/problems" replace />
+                  : <Navigate to="/login" replace />
+              } />
+
+              {/* Public */}
               <Route path="/login" element={<Login />} />
-              <Route path="/logout" element={<Logout />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route path="/about" element={<About />} />
+              <Route path="/leaderboard/:contestId" element={<Leaderboard />} />
+
+              {/* Team protected */}
+              <Route path="/problems" element={<ProtectedRoute><Problems /></ProtectedRoute>} />
+              <Route path="/problems/:id" element={<ProtectedRoute><ProblemDetails /></ProtectedRoute>} />
+              <Route path="/submissions/" element={<ProtectedRoute><FetchAllYourSubmissions /></ProtectedRoute>} />
+              <Route path="/submissions/:id" element={<ProtectedRoute><ShowSubmissionById /></ProtectedRoute>} />
 
               <Route path="/admin/login" element={<AdminLogin />} />
 

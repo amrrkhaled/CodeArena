@@ -2,7 +2,7 @@ const axios = require('axios');
 const db = require('../config/db');
 require('dotenv').config();
 //submissions
-const JUDGE0_URL = 'http://localhost:2358/submissions';
+const JUDGE0_URL = process.env.JUDGE0_URL || 'http://localhost:2358/submissions';
 const JUDGE0_HEADERS = {
   'Content-Type': 'application/json',
 };

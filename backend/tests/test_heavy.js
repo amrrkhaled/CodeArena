@@ -17,7 +17,7 @@
  *   GET  /languages
  *   GET  /problems/:contestId
  *   POST /submissions            { contest_id, problem_id, language_id, code }
- *   GET  /submissions/my?contest_id=...
+ *   GET  /submissions/mine?contest_id=...
  *   GET  /submissions/:id        (team-scope)
  *   GET  /leaderboard/:contestId
  */
@@ -27,7 +27,7 @@ const axios = require('axios');
 // ======================= CONFIG =======================
 
 const baseURL = 'http://localhost:5000/api';
-const contestId = 2; // <- Your seeded contest id
+const contestId = 1; // <- Your seeded contest id
 
 // Seed teams
 const teams = [
@@ -226,7 +226,7 @@ async function submitSolution(token, { contest_id, problem_id, language_id, code
 
 async function getMySubmissions(token, contest_id) {
   return withRetry(
-    () => api.get(`/submissions/my`, {
+    () => api.get(`/submissions/mine`, {
       params: { contest_id },
       headers: { Authorization: `Bearer ${token}` }
     }),
@@ -621,8 +621,8 @@ async function main() {
   }
   printTable(Object.values(summary).sort((a, b) => a.team.localeCompare(b.team)));
 
-  // 9) Cross-check with /submissions/my (sanity)
-  hr('CROSS-CHECK: /submissions/my');
+  // 9) Cross-check with /submissions/mine (sanity)
+  hr('CROSS-CHECK: /submissions/mine');
   for (const team of tokens) {
     if (!team.token) continue;
     try {
