@@ -1,7 +1,7 @@
 process.env.JWT_SECRET = 'test_secret';
 
 jest.mock('../../config/db', () => ({ query: jest.fn() }));
-jest.mock('../../jobs/deactivateContests', () => {});
+jest.mock('../../jobs/contestScheduler', () => {});
 
 const request = require('supertest');
 const { createApp } = require('../../app');
@@ -18,7 +18,7 @@ describe('POST /api/auth/register', () => {
     const res = await request(app)
       .post('/api/auth/register')
       .send({ name: 'TeamA', password: 'pass123' });
-    expect(res.status).toBe(200);
+    expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('token');
   });
 

@@ -1,7 +1,7 @@
 process.env.JWT_SECRET = 'test_secret';
 
 jest.mock('../../config/db', () => ({ query: jest.fn() }));
-jest.mock('../../jobs/deactivateContests', () => {});
+jest.mock('../../jobs/contestScheduler', () => {});
 
 const request = require('supertest');
 const { createApp } = require('../../app');
@@ -65,7 +65,7 @@ describe('POST /api/contests', () => {
     const res = await request(app)
       .post('/api/contests')
       .set('Authorization', `Bearer ${adminToken}`)
-      .send({ name: 'Test', start_time: '2026-01-01', end_time: '2099-01-01', is_active: true });
+      .send({ name: 'Test', start_time: '2026-01-01', end_time: '2099-01-01' });
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty('name', 'Test');
   });

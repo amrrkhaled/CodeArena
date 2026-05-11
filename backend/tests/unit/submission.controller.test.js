@@ -20,6 +20,7 @@ describe('submit', () => {
   });
 
   it('creates submission and returns 201', async () => {
+    db.query.mockResolvedValueOnce({ rows: [{ status: 'ACTIVE' }] });
     db.query.mockResolvedValueOnce({ rows: [{ id: 42 }] });
     const res = mockRes();
     await submissionController.submit({

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "../style/TeamByIDLeaderboard.css";
 import api from "../api";
 
@@ -17,6 +17,7 @@ export const TeamByIDLeaderboard = () => {
   });
 
   const { contestId, teamId } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchTeamData = async () => {
@@ -47,6 +48,7 @@ export const TeamByIDLeaderboard = () => {
     <div className="team-leaderboard-container">
       <div className="team-content">
         <div className="team-header">
+          <button onClick={() => navigate(-1)} style={{ background: "none", border: "none", cursor: "pointer", fontSize: "1rem", marginBottom: "0.5rem", color: "#4682A9" }}>← Back</button>
           <h2>{teamData.team_name}</h2>
           <p>Team Performance Overview</p>
         </div>

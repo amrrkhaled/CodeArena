@@ -1,7 +1,7 @@
 process.env.JWT_SECRET = 'test_secret';
 
 jest.mock('../../config/db', () => ({ query: jest.fn() }));
-jest.mock('../../jobs/deactivateContests', () => {});
+jest.mock('../../jobs/contestScheduler', () => {});
 
 const request = require('supertest');
 const { createApp } = require('../../app');

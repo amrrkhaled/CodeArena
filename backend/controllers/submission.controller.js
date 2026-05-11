@@ -11,6 +11,18 @@ exports.submit = async (req, res) => {
   }
 
   try {
+    const contestResult = await db.query(
+      `SELECT status FROM contests WHERE id = $1`,
+      [contest_id]
+    );
+    if (contestResult.rows.length === 0) {
+      return res.status(404).json({ error: 'Contest not found' });
+    }
+    const { status } = contestResult.rows[0];
+    if (status !== 'ACTIVE' && status !== 'FROZEN') {
+      return res.status(403).json({ error: 'Contest is not accepting submissions' });
+    }
+
     const result = await db.query(
       `INSERT INTO submissions (team_id, contest_id, problem_id, language_id, code, verdict)
        VALUES ($1, $2, $3, $4, $5, 'Pending') RETURNING id`,

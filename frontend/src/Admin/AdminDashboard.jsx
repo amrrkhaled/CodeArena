@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ADMIN_TABS, ADMIN_TAB_CONTENT } from "./adminDashboardConfig";
 import "../style/AdminDashboard.css";
 import { useContext } from "react";
@@ -9,8 +9,10 @@ import ThemeToggle from "../Components/ThemeToggle";
 
 export const AdminDashboard = () => {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { contests, selectedContestId, setSelectedContestId, refreshContests } = useContext(ContestContext);
-  const [activeTab, setActiveTab] = useState("setup");
+  const activeTab = searchParams.get("tab") || "setup";
+  const setActiveTab = (id) => setSearchParams({ tab: id }, { replace: false });
 
   useEffect(() => {
     refreshContests();

@@ -1,5 +1,14 @@
+-- Drop in reverse dependency order
+DROP TABLE IF EXISTS test_cases   CASCADE;
+DROP TABLE IF EXISTS submissions  CASCADE;
+DROP TABLE IF EXISTS problems     CASCADE;
+DROP TABLE IF EXISTS languages    CASCADE;
+DROP TABLE IF EXISTS contests     CASCADE;
+DROP TABLE IF EXISTS teams        CASCADE;
+DROP TABLE IF EXISTS admins       CASCADE;
+
 -- 1. Teams
-CREATE TABLE IF NOT EXISTS teams (
+CREATE TABLE teams (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) UNIQUE NOT NULL,
     password TEXT NOT NULL,
@@ -8,17 +17,18 @@ CREATE TABLE IF NOT EXISTS teams (
 );
 
 -- 2. Contests
-CREATE TABLE IF NOT EXISTS contests (
+CREATE TABLE contests (
     id SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL,
     start_time TIMESTAMP NOT NULL,
     end_time TIMESTAMP NOT NULL,
-    is_active BOOLEAN DEFAULT TRUE,
-    blind_started_at TIMESTAMP NULL
+    status VARCHAR(20) NOT NULL DEFAULT 'DRAFT',
+    blind_started_at TIMESTAMP NULL,
+    CONSTRAINT contests_status_check CHECK (status IN ('DRAFT','UPCOMING','ACTIVE','FROZEN','FINISHED'))
 );
 
 -- 3. Problems
-CREATE TABLE IF NOT EXISTS problems (
+CREATE TABLE problems (
     id VARCHAR(10),
     contest_id INT REFERENCES contests(id) ON DELETE CASCADE,
     title VARCHAR(100) NOT NULL,
@@ -33,14 +43,14 @@ CREATE TABLE IF NOT EXISTS problems (
 );
 
 -- 4. Languages
-CREATE TABLE IF NOT EXISTS languages (
+CREATE TABLE languages (
     id SERIAL PRIMARY KEY,
     name VARCHAR(50) NOT NULL,
     extension VARCHAR(10) NOT NULL
 );
 
 -- 5. Submissions
-CREATE TABLE IF NOT EXISTS submissions (
+CREATE TABLE submissions (
     id SERIAL PRIMARY KEY,
     team_id INT REFERENCES teams(id) ON DELETE CASCADE,
     contest_id INT REFERENCES contests(id) ON DELETE CASCADE,
@@ -57,7 +67,7 @@ CREATE TABLE IF NOT EXISTS submissions (
 );
 
 -- 6. Test Cases
-CREATE TABLE IF NOT EXISTS test_cases (
+CREATE TABLE test_cases (
   id SERIAL PRIMARY KEY,
   contest_id INT,
   problem_id VARCHAR(10),
@@ -70,7 +80,7 @@ CREATE TABLE IF NOT EXISTS test_cases (
 );
 
 -- 7. Admins
-CREATE TABLE IF NOT EXISTS admins (
+CREATE TABLE admins (
     id SERIAL PRIMARY KEY,
     username VARCHAR(100) UNIQUE NOT NULL,
     password TEXT NOT NULL,

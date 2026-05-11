@@ -49,17 +49,27 @@ const fs = require('fs');
 exports.createProblem = async (req, res) => {
   const { contestId } = req.params;
 
+  if (!req.file) {
+    return res.status(400).json({ message: "No file uploaded" });
+  }
+
+  let fileContent;
   try {
-    // multer stores file at req.file
-    if (!req.file) {
-      return res.status(400).json({ message: "No file uploaded" });
-    }
+    fileContent = fs.readFileSync(req.file.path, 'utf-8');
+  } catch {
+    return res.status(400).json({ message: "Could not read uploaded file" });
+  }
 
-    console.log("Uploaded file info:", req.file); 
+  let problems;
+  try {
+    problems = JSON.parse(fileContent);
+  } catch {
+    return res.status(400).json({ message: "Invalid JSON in uploaded file" });
+  }
 
-    // read and parse file
-    const fileContent = fs.readFileSync(req.file.path, 'utf-8');
-    const problems = JSON.parse(fileContent);
+  const client = await db.connect();
+  try {
+    await client.query('BEGIN');
 
     const insertedProblems = [];
 
@@ -75,25 +85,22 @@ exports.createProblem = async (req, res) => {
         test_cases
       } = problem;
 
-      // You may want default values if not in file
       const time_limit_ms = problem.time_limit_ms || 1000;
       const memory_limit_mb = problem.memory_limit_mb || 64;
 
-      // Insert problem
-      const result = await db.query(
-        `INSERT INTO problems 
+      const result = await client.query(
+        `INSERT INTO problems
           (id, contest_id, title, description, input_description, output_description, sample_input, sample_output, time_limit_ms, memory_limit_mb)
          VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
-         ON CONFLICT (contest_id,id) DO UPDATE 
+         ON CONFLICT (contest_id,id) DO UPDATE
          SET title=EXCLUDED.title, description=EXCLUDED.description
          RETURNING *`,
         [id, contestId, title, description, input_description, output_description, sample_input, sample_output, time_limit_ms, memory_limit_mb]
       );
 
-      // Insert test cases
       if (Array.isArray(test_cases)) {
         for (const tc of test_cases) {
-          await db.query(
+          await client.query(
             `INSERT INTO test_cases (contest_id, problem_id, input, expected_output, is_sample)
              VALUES ($1,$2,$3,$4,$5)`,
             [contestId, id, tc.input, tc.output, tc.is_sample]
@@ -104,13 +111,18 @@ exports.createProblem = async (req, res) => {
       insertedProblems.push(result.rows[0]);
     }
 
+    await client.query('COMMIT');
+
     return res.status(201).json({
       message: "Problems and test cases uploaded successfully",
       problems: insertedProblems
     });
 
   } catch (error) {
+    await client.query('ROLLBACK');
     console.error("Error uploading problems:", error);
     return res.status(500).json({ message: "Server error" });
+  } finally {
+    client.release();
   }
 };

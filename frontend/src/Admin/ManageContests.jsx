@@ -3,6 +3,24 @@ import api from "../api";
 import { ContestContext } from "../context/ContextCreation";
 import "../style/ManageContests.css";
 
+const STATUS_LABEL = {
+  DRAFT:    "Draft",
+  UPCOMING: "Upcoming",
+  ACTIVE:   "Active",
+  FROZEN:   "Frozen",
+  FINISHED: "Finished",
+};
+
+const STATUS_CLASS = {
+  DRAFT:    "draft",
+  UPCOMING: "upcoming",
+  ACTIVE:   "live",
+  FROZEN:   "blind",
+  FINISHED: "draft",
+};
+
+const STATUS_ORDER = { ACTIVE: 5, FROZEN: 4, UPCOMING: 3, FINISHED: 2, DRAFT: 1 };
+
 const toDateTimeLocal = (value) => {
   if (!value) return "";
   const date = new Date(value);
@@ -16,19 +34,13 @@ const toDateTimeLocal = (value) => {
 export const ManageContests = () => {
   const { contests, refreshContests, selectedContestId, setSelectedContestId } = useContext(ContestContext);
   const [editingId, setEditingId] = useState(null);
-  const [draft, setDraft] = useState({
-    name: "",
-    start_time: "",
-    end_time: "",
-    is_active: false,
-    blind_started_at: null,
-  });
+  const [draft, setDraft] = useState({ name: "", start_time: "", end_time: "" });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [busyId, setBusyId] = useState(null);
 
   const sortedContests = useMemo(
-    () => [...contests].sort((a, b) => Number(b.is_active) - Number(a.is_active) || b.id - a.id),
+    () => [...contests].sort((a, b) => (STATUS_ORDER[b.status] ?? 0) - (STATUS_ORDER[a.status] ?? 0) || b.id - a.id),
     [contests]
   );
 
@@ -38,64 +50,45 @@ export const ManageContests = () => {
       name: contest.name || "",
       start_time: toDateTimeLocal(contest.start_time),
       end_time: toDateTimeLocal(contest.end_time),
-      is_active: Boolean(contest.is_active),
-      blind_started_at: contest.blind_started_at || null,
     });
     setError("");
     setSuccess("");
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setError("");
-  };
+  const cancelEdit = () => { setEditingId(null); setError(""); };
 
-  const saveContest = async (contestId, nextValues) => {
+  const adminHeaders = () => ({ Authorization: `Bearer ${localStorage.getItem("adminToken")}` });
+
+  const callEndpoint = async (contestId, method, path, body = null) => {
     setBusyId(contestId);
     setError("");
     setSuccess("");
     try {
-      const adminToken = localStorage.getItem("adminToken");
-      const response = await api.put(`/contests/${contestId}`, nextValues, {
-        headers: { Authorization: `Bearer ${adminToken}` },
-      });
-
+      const config = { headers: adminHeaders() };
+      const response = body
+        ? await api[method](path, body, config)
+        : await api[method](path, null, config);
       await refreshContests(response.data.id);
       setSelectedContestId(String(response.data.id));
-      setSuccess(`Saved changes for ${response.data.name}.`);
+      setSuccess(`Updated: ${response.data.name}.`);
       setEditingId(null);
     } catch (err) {
-      setError(err.response?.data?.message || "Failed to save contest changes.");
+      setError(err.response?.data?.message || "Action failed.");
     } finally {
       setBusyId(null);
     }
   };
 
-  const toggleContest = async (contest) => {
-    await saveContest(contest.id, {
-      name: contest.name,
-      start_time: toDateTimeLocal(contest.start_time),
-      end_time: toDateTimeLocal(contest.end_time),
-      is_active: !contest.is_active,
-      blind_started_at: contest.blind_started_at || null,
-    });
-  };
-
-  const toggleBlindTime = async (contest) => {
-    await saveContest(contest.id, {
-      name: contest.name,
-      start_time: toDateTimeLocal(contest.start_time),
-      end_time: toDateTimeLocal(contest.end_time),
-      is_active: Boolean(contest.is_active),
-      blind_started_at: contest.blind_started_at ? null : new Date().toISOString(),
-    });
-  };
-
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const saveEdit = async (e) => {
+    e.preventDefault();
     if (!editingId) return;
-    await saveContest(editingId, draft);
+    await callEndpoint(editingId, "put", `/contests/${editingId}`, draft);
   };
+
+  const publish   = (id) => callEndpoint(id, "post", `/contests/${id}/publish`);
+  const unpublish = (id) => callEndpoint(id, "post", `/contests/${id}/unpublish`);
+  const freeze    = (id) => callEndpoint(id, "post", `/contests/${id}/freeze`);
+  const finish    = (id) => callEndpoint(id, "post", `/contests/${id}/finish`);
 
   return (
     <div className="manage-contests">
@@ -112,6 +105,7 @@ export const ManageContests = () => {
           sortedContests.map((contest) => {
             const isEditing = editingId === contest.id;
             const isBusy = busyId === contest.id;
+            const s = contest.status;
 
             return (
               <article className="contest-manage-card" key={contest.id}>
@@ -119,12 +113,12 @@ export const ManageContests = () => {
                   <div>
                     <div className="contest-manage-title-row">
                       <h3>{contest.name || `Contest #${contest.id}`}</h3>
-                      <span className={`contest-manage-status ${contest.is_active ? "live" : "draft"}`}>
-                        {contest.is_active ? "Active" : "Inactive"}
+                      <span className={`contest-manage-status ${STATUS_CLASS[s] ?? "draft"}`}>
+                        {STATUS_LABEL[s] ?? s}
                       </span>
-                      <span className={`contest-manage-status ${contest.blind_started_at ? "blind" : "draft"}`}>
-                        {contest.blind_started_at ? "Blind Time On" : "Blind Time Off"}
-                      </span>
+                      {s === "FROZEN" && (
+                        <span className="contest-manage-status blind">Blind Time On</span>
+                      )}
                     </div>
                     <p>
                       {new Date(contest.start_time).toLocaleString()} to{" "}
@@ -136,6 +130,7 @@ export const ManageContests = () => {
                       </p>
                     )}
                   </div>
+
                   <div className="contest-manage-actions">
                     <button
                       type="button"
@@ -148,37 +143,46 @@ export const ManageContests = () => {
                       type="button"
                       className="contest-manage-secondary"
                       onClick={() => beginEdit(contest)}
+                      disabled={isBusy}
                     >
                       Edit
                     </button>
-                    <button
-                      type="button"
-                      className={`contest-manage-toggle ${contest.is_active ? "deactivate" : "activate"}`}
-                      onClick={() => toggleContest(contest)}
-                      disabled={isBusy}
-                    >
-                      {contest.is_active ? "Deactivate" : "Activate"}
-                    </button>
-                    <button
-                      type="button"
-                      className={`contest-manage-toggle ${contest.blind_started_at ? "blind-off" : "blind-on"}`}
-                      onClick={() => toggleBlindTime(contest)}
-                      disabled={isBusy}
-                    >
-                      {contest.blind_started_at ? "End Blind Time" : "Start Blind Time"}
-                    </button>
+
+                    {s === "DRAFT" && (
+                      <button type="button" className="contest-manage-toggle activate" onClick={() => publish(contest.id)} disabled={isBusy}>
+                        Publish
+                      </button>
+                    )}
+                    {s === "UPCOMING" && (
+                      <button type="button" className="contest-manage-toggle deactivate" onClick={() => unpublish(contest.id)} disabled={isBusy}>
+                        Unpublish
+                      </button>
+                    )}
+                    {s === "ACTIVE" && (<>
+                      <button type="button" className="contest-manage-toggle blind-on" onClick={() => freeze(contest.id)} disabled={isBusy}>
+                        Start Blind Time
+                      </button>
+                      <button type="button" className="contest-manage-toggle deactivate" onClick={() => finish(contest.id)} disabled={isBusy}>
+                        Finish
+                      </button>
+                    </>)}
+                    {s === "FROZEN" && (
+                      <button type="button" className="contest-manage-toggle deactivate" onClick={() => finish(contest.id)} disabled={isBusy}>
+                        Finish
+                      </button>
+                    )}
                   </div>
                 </div>
 
                 {isEditing && (
-                  <form className="contest-edit-form" onSubmit={handleSubmit}>
+                  <form className="contest-edit-form" onSubmit={saveEdit}>
                     <div className="contest-edit-grid">
                       <label>
                         <span>Name</span>
                         <input
                           type="text"
                           value={draft.name}
-                          onChange={(e) => setDraft((current) => ({ ...current, name: e.target.value }))}
+                          onChange={(e) => setDraft((d) => ({ ...d, name: e.target.value }))}
                           required
                         />
                       </label>
@@ -187,7 +191,7 @@ export const ManageContests = () => {
                         <input
                           type="datetime-local"
                           value={draft.start_time}
-                          onChange={(e) => setDraft((current) => ({ ...current, start_time: e.target.value }))}
+                          onChange={(e) => setDraft((d) => ({ ...d, start_time: e.target.value }))}
                           required
                         />
                       </label>
@@ -196,16 +200,8 @@ export const ManageContests = () => {
                         <input
                           type="datetime-local"
                           value={draft.end_time}
-                          onChange={(e) => setDraft((current) => ({ ...current, end_time: e.target.value }))}
+                          onChange={(e) => setDraft((d) => ({ ...d, end_time: e.target.value }))}
                           required
-                        />
-                      </label>
-                      <label className="contest-edit-check">
-                        <span>Active</span>
-                        <input
-                          type="checkbox"
-                          checked={draft.is_active}
-                          onChange={(e) => setDraft((current) => ({ ...current, is_active: e.target.checked }))}
                         />
                       </label>
                     </div>

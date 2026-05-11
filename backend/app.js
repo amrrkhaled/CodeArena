@@ -1,5 +1,5 @@
 require('./config/env');
-require('./jobs/deactivateContests');
+require('./jobs/contestScheduler');
 
 const express = require('express');
 const cors = require('cors');

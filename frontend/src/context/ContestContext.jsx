@@ -12,7 +12,7 @@ const normalizeContest = (contest) => ({
     contest?.contestName ??
     contest?.title ??
     "",
-  is_active: Boolean(contest?.is_active ?? contest?.isActive),
+  is_active: ['ACTIVE', 'FROZEN'].includes(contest?.status),
   blind_started_at:
     contest?.blind_started_at ??
     contest?.blindStartedAt ??
@@ -95,31 +95,39 @@ export const ContestProvider = ({ children }) => {
 
     if (!selected || !selectedContestId) return;
 
-    if (!selected.is_active) {
+    const { status: dbStatus, start_time, end_time } = selected;
+
+    if (dbStatus === 'DRAFT') {
       setStatus("inactive");
       setTimeLeft(null);
       setBlindTimeStarted(false);
       return;
     }
 
-    const { start_time, end_time, blind_started_at } = selected;
+    if (dbStatus === 'FINISHED') {
+      setStatus("ended");
+      setTimeLeft(0);
+      setBlindTimeStarted(false);
+      return;
+    }
+
     const now = Date.now();
     const start = new Date(start_time).getTime();
     const end = new Date(end_time).getTime();
-    const blindStart = blind_started_at ? new Date(blind_started_at).getTime() : null;
 
     if (now < start) {
       setStatus("upcoming");
       setTimeLeft(Math.floor((start - now) / 1000));
+      setBlindTimeStarted(false);
     } else if (now > end) {
       setStatus("ended");
       setTimeLeft(0);
+      setBlindTimeStarted(false);
     } else {
       setStatus("running");
       setTimeLeft(Math.floor((end - now) / 1000));
+      setBlindTimeStarted(dbStatus === 'FROZEN');
     }
-
-    setBlindTimeStarted(Boolean(blindStart && now >= blindStart && now <= end));
   }, [contests, selectedContestId]);
 
   useEffect(() => {
@@ -137,24 +145,38 @@ export const ContestProvider = ({ children }) => {
         const selectedContest = normalizeContest(response.data);
         setCurrentContest(selectedContest);
 
-        const { start_time, end_time, blind_started_at } = selectedContest;
+        const { status: dbStatus, start_time, end_time } = selectedContest;
+
+        if (dbStatus === 'DRAFT') {
+          setStatus("inactive");
+          setTimeLeft(null);
+          setBlindTimeStarted(false);
+          return;
+        }
+        if (dbStatus === 'FINISHED') {
+          setStatus("ended");
+          setTimeLeft(0);
+          setBlindTimeStarted(false);
+          return;
+        }
+
         const now = Date.now();
         const start = new Date(start_time).getTime();
         const end = new Date(end_time).getTime();
-        const blindStart = blind_started_at ? new Date(blind_started_at).getTime() : null;
 
         if (now < start) {
           setStatus("upcoming");
           setTimeLeft(Math.floor((start - now) / 1000));
-        } else if (now > end){
-            setStatus("ended");
-            setTimeLeft(0);
+          setBlindTimeStarted(false);
+        } else if (now > end) {
+          setStatus("ended");
+          setTimeLeft(0);
+          setBlindTimeStarted(false);
         } else {
-            setStatus("running");
-            setTimeLeft(Math.floor((end - now) / 1000));
+          setStatus("running");
+          setTimeLeft(Math.floor((end - now) / 1000));
+          setBlindTimeStarted(dbStatus === 'FROZEN');
         }
-
-        setBlindTimeStarted(Boolean(blindStart && now >= blindStart && now <= end));
 
       } catch (err) {
         console.error("Failed to fetch contest times", err);

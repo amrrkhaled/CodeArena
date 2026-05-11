@@ -73,14 +73,16 @@ async function createContest() {
   const name = await ask('Contest name: ');
   const start_time = await ask('Start time (YYYY-MM-DD HH:mm:ss): ');
   const end_time = await ask('End time (YYYY-MM-DD HH:mm:ss): ');
-  const is_active_input = await ask('Is active? (yes/no, default yes): ');
-  const is_active = !is_active_input || is_active_input.toLowerCase().startsWith('y');
+  const status_input = await ask('Initial status? (DRAFT/UPCOMING/ACTIVE, default DRAFT): ');
+  const status = ['DRAFT', 'UPCOMING', 'ACTIVE'].includes(status_input?.toUpperCase())
+    ? status_input.toUpperCase()
+    : 'DRAFT';
 
   try {
     const res = await pool.query(
-      `INSERT INTO contests (name, start_time, end_time, is_active)
+      `INSERT INTO contests (name, start_time, end_time, status)
        VALUES ($1, $2, $3, $4) RETURNING id`,
-      [name, start_time, end_time, is_active]
+      [name, start_time, end_time, status]
     );
     const contestId = res.rows[0].id;
     console.log(`✅ Created contest with ID: ${contestId}\n`);

@@ -1,7 +1,7 @@
 process.env.JWT_SECRET = 'test_secret';
 
 jest.mock('../../config/db', () => ({ query: jest.fn() }));
-jest.mock('../../jobs/deactivateContests', () => {});
+jest.mock('../../jobs/contestScheduler', () => {});
 jest.mock('../../judge/judgeSubmission', () => ({ judgeSubmission: jest.fn() }));
 
 const request = require('supertest');
@@ -35,6 +35,7 @@ describe('POST /api/submissions', () => {
 
   it('creates submission and returns 201', async () => {
     mockTeamAuth();
+    db.query.mockResolvedValueOnce({ rows: [{ status: 'ACTIVE' }] });
     db.query.mockResolvedValueOnce({ rows: [{ id: 42 }] });
     const res = await request(app)
       .post('/api/submissions')

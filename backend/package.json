@@ -16,7 +16,8 @@
   "jest": {
     "testEnvironment": "node",
     "testTimeout": 30000,
-    "verbose": true,
+    "verbose": false,
+    "reporters": ["./tests/reporter.js"],
     "testPathIgnorePatterns": ["/node_modules/", "tests/test\\.js$", "tests/test_heavy\\.js$"]
   },
   "dependencies": {

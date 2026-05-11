@@ -16,7 +16,7 @@ exports.register = async (req, res) => {
     );
 
     const token = jwt.sign({ id: result.rows[0].id, name }, JWT_SECRET, { expiresIn: '12h' });
-    res.json({ token });
+    res.status(201).json({ token });
   } catch (err) {
     if (err.code === '23505') {
       res.status(409).json({ error: 'Team name already taken' });

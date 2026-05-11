@@ -5,7 +5,7 @@
 process.env.JWT_SECRET = 'test_secret';
 
 jest.mock('../../config/db', () => ({ query: jest.fn() }));
-jest.mock('../../jobs/deactivateContests', () => {});
+jest.mock('../../jobs/contestScheduler', () => {});
 jest.mock('../../judge/judgeSubmission', () => ({ judgeSubmission: jest.fn() }));
 
 const request = require('supertest');
@@ -25,7 +25,7 @@ describe('System: Team Registration and Login Flow', () => {
     const regRes = await request(app)
       .post('/api/auth/register')
       .send({ name: 'AlphaTeam', password: 'secret', institution: 'FCI' });
-    expect(regRes.status).toBe(200);
+    expect(regRes.status).toBe(201);
     const token = regRes.body.token;
 
     db.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ id: 10, name: 'AlphaTeam' }] });
@@ -64,6 +64,7 @@ describe('System: Problem Solving Flow', () => {
     expect(problemsRes.body).toHaveLength(2);
 
     db.query.mockResolvedValueOnce({ rowCount: 1, rows: [{ id: 1, name: 'AlphaTeam' }] });
+    db.query.mockResolvedValueOnce({ rows: [{ status: 'ACTIVE' }] });
     db.query.mockResolvedValueOnce({ rows: [{ id: 99 }] });
     const submitRes = await request(app)
       .post('/api/submissions')
@@ -115,7 +116,7 @@ describe('System: Admin Contest Management Flow', () => {
     const createRes = await request(app)
       .post('/api/contests')
       .set('Authorization', `Bearer ${adminToken}`)
-      .send({ name: 'New Contest', start_time: '2026-01-01', end_time: '2099-12-31', is_active: true });
+      .send({ name: 'New Contest', start_time: '2026-01-01', end_time: '2099-12-31' });
     expect(createRes.status).toBe(201);
     expect(createRes.body.name).toBe('New Contest');
 
